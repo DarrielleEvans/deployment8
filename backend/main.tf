@@ -161,7 +161,7 @@ resource "aws_ecs_task_definition" "backend" {
   [
   {
       "name": "backend-container",
-      "image": "aubreyz/deployment8backend:latest",
+      "image": "aubreyz/backend:latest",
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
