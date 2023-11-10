@@ -2,23 +2,24 @@ pipeline {
     agent {label 'awsDeploy'}
     environment{
         DOCKERHUB_CREDENTIALS = credentials('aubreyz-dockerhub')
-    }
-    stage ('Change Directory'){
+        }
+    stages{
+    stage('Change Directory'){
         steps{
             sh 'cd backend'
         }
     }
-    stage ('Build'){
+    stage('Build'){
         steps {
             sh 'docker build -t aubreyz/backend .'
         }
     }
-    stage ('Login') {
+    stage('Login') {
         steps {
           sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
         }
     }
-    stage ('Push') {
+    stage('Push') {
         steps {
             sh 'docker push aubreyz/backend'
         }
@@ -60,4 +61,5 @@ pipeline {
         }
     }
 
+}
 }
