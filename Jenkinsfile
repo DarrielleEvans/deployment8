@@ -3,12 +3,12 @@ pipeline {
     environment{
         DOCKERHUB_CREDENTIALS = credentials('aubreyz-dockerhub')
     }
-    stage {'Change Directory'}{
+    stage ('Change Directory'){
         steps{
             sh 'cd backend'
         }
     }
-    stage {'Build'}{
+    stage ('Build'){
         steps {
             sh 'docker build -t aubreyz/backend .'
         }
