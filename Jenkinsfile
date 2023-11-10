@@ -4,24 +4,25 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('aubreyz-dockerhub')
         }
     stages{
-    stage('Change Directory'){
-        steps{
-            sh 'cd backend'
-        }
-    }
     stage('Build'){
         steps {
+            dir('backend'){
             sh 'docker build -t aubreyz/backend .'
+            }
         }
     }
     stage('Login') {
         steps {
-          sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            dir('backend'){
+            sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
         }
     }
     stage('Push') {
         steps {
-            sh 'docker push aubreyz/backend'
+            dir('backend'){ 
+                sh 'docker push aubreyz/backend'
+            }
         }
     }
 
