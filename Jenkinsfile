@@ -18,14 +18,14 @@ pipeline {
           sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
         }
     }
-    tage ('Push') {
+    stage ('Push') {
         steps {
-            sh 'docker push aubreyz/bank4'
+            sh 'docker push aubreyz/backend'
         }
     }
 
     stage('Init') {
-        agent {label 'awsDeploy'}
+        agent {label 'awsDeploy2'}
         steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
@@ -37,7 +37,7 @@ pipeline {
     }
 
     stage('Plan') {
-        agent {label 'awsDeploy'}
+        agent {label 'awsDeploy2'}
         steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
@@ -49,7 +49,7 @@ pipeline {
     }
 
       stage('Apply') {
-        agent {label 'awsDeploy'}
+        agent {label 'awsDeploy2'}
        steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
