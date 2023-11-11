@@ -175,10 +175,10 @@ resource "aws_lb_target_group" "backend_target" {
   target_type = "ip"
   vpc_id = aws_vpc.main.id
 
-  health_check {
-    enabled = true
-    path = "/health"
-  }
+  # health_check {
+  #   enabled = true
+  #   path = "/health"
+  # }
   depends_on = [ aws_alb.d8-alb ]
 }
 
