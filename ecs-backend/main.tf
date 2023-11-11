@@ -1,6 +1,6 @@
 provider "aws" {
-    access_key = var.aws_access_key
-    secret_key = var.aws_secret_key
+    access_key = var.access_key
+    secret_key = var.secret_key
     region = "us-east-1"
 }
 
@@ -55,8 +55,8 @@ resource "aws_internet_gateway" "internet" {
 
 ################ Creating Security group ##########################
 resource "aws_security_group" "sg" {
-  name = "d7_sg"
-  description = "traffic for d7"
+  name = "d8_sg"
+  description = "traffic for d8"
   vpc_id = aws_vpc.main.id
   ingress {
     from_port = 80
@@ -101,52 +101,14 @@ resource "aws_ecs_cluster" "ecs-cluster" {
   }
 }
 
-###################### Creating a log group ##################################
-resource "aws_cloudwatch_log_group" "frontend-logs" {
-  name = "/ecs/d8-front-logs"
-  tags = {
-    Application = "d8-app"
-  }
-}
 resource "aws_cloudwatch_log_group" "backend-logs" {
-  name = "/ecs/d8-back-logs"
+  name = "/ecs/backend-logs"
   tags = {
     Application = "d8-app"
   }
 }
 
 
-################### Create a Task ##########################################
-resource "aws_ecs_task_definition" "frontend" {
-  family = "d8-frontend-task"
-  requires_compatibilities = ["FARGATE"]
-  network_mode             = "awsvpc"
-  memory                   = "1024"
-  cpu                      = "512"
-  execution_role_arn       = "arn:aws:iam::393598274403:role/ecsTaskExecutionRole"
-  task_role_arn            = "arn:aws:iam::393598274403:role/ecsTaskExecutionRole"
-
-  container_definitions = <<EOF
-  [{
-    "name": "frontend-container",
-    "image": "aubreyz/deployment8frontend:latest",
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "/ecs/d8-front-logs",
-        "awslogs-region": "us-east-1",
-        "awslogs-stream-prefix": "ecs"
-      }
-    },
-    "portMappings": [
-      {
-        "containerPort": 3000
-      }
-    ]
-  }
-  ]
-  EOF
-}
 
 resource "aws_ecs_task_definition" "backend" {
   family = "d8-backend-task"
@@ -181,32 +143,6 @@ resource "aws_ecs_task_definition" "backend" {
 
 }
 
-###################### creatine ecs service ########################################
-resource "aws_ecs_service" "frontend_service" {
-  name = "frontend_service"
-  cluster = aws_ecs_cluster.ecs-cluster.id
-  task_definition = aws_ecs_task_definition.frontend.arn
-  launch_type = "FARGATE"
-  scheduling_strategy = "REPLICA"
-  desired_count = 2
-  force_new_deployment = true
-  
-  network_configuration {
-    subnets = [
-      aws_subnet.public1.id,
-      aws_subnet.public2.id
-    ]
-    assign_public_ip = false
-    security_groups = [aws_security_group.sg.id]
-  }
-  load_balancer {
-    target_group_arn = aws_lb_target_group.frontend_target.arn
-    container_name   = "frontend-container"
-    container_port   = 3000
-  }
-  depends_on = [ aws_alb_listener.frontend_listener ]
-}
-
 resource "aws_ecs_service" "backend_service" {
   name = "backend_service"
   cluster = aws_ecs_cluster.ecs-cluster.id
@@ -220,7 +156,7 @@ resource "aws_ecs_service" "backend_service" {
     subnets = [
       aws_subnet.public1.id,
     ]
-    assign_public_ip = false
+    assign_public_ip = true
     security_groups = [aws_security_group.sg.id]
   }
   load_balancer {
@@ -231,20 +167,6 @@ resource "aws_ecs_service" "backend_service" {
   depends_on = [ aws_alb_listener.backend_listener ]
 }
 
-##################### Target groups #########################
-resource "aws_lb_target_group" "frontend_target" {
-  name = "frontend-target"
-  port = 3000
-  protocol = "HTTP"
-  target_type = "ip"
-  vpc_id = aws_vpc.main.id
-
-  health_check {
-    enabled = true
-    path = "/health"
-  }
-  depends_on = [ aws_alb.d8-alb ]
-}
 
 resource "aws_lb_target_group" "backend_target" {
   name = "backend-target"
@@ -276,16 +198,7 @@ resource "aws_alb" "d8-alb" {
 }
 
 ################ Listener ######################################
-resource "aws_alb_listener" "frontend_listener" {
-  load_balancer_arn = aws_alb.d8-alb.arn
-  port = "80"
-  protocol = "HTTP"
 
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.frontend_target.arn
-  }
-}
 
 resource "aws_alb_listener" "backend_listener" {
   load_balancer_arn = aws_alb.d8-alb.arn
@@ -296,8 +209,4 @@ resource "aws_alb_listener" "backend_listener" {
     type = "forward"
     target_group_arn = aws_lb_target_group.backend_target.arn
   }
-}
-
-output "frontend_url"{
-  value = aws_alb.d8-alb
 }
