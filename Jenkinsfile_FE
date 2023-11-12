@@ -7,7 +7,7 @@ pipeline {
     stage('Build'){
         steps {
             dir('frontend'){
-            sh 'docker build -t aubreyz/frontend1 .'
+            sh 'docker build -t aubreyz/frontend2 .'
             }
         }
     }
@@ -21,7 +21,7 @@ pipeline {
     stage('Push') {
         steps {
             dir('frontend'){ 
-                sh 'docker push aubreyz/frontend1'
+                sh 'docker push aubreyz/frontend2'
             }
         }
     }
