@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "frontend" {
   [
     {
     "name": "frontend-container",
-    "image": "aubreyz/frontend2:latest",
+    "image": "aubreyz/frontend1:latest",
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
