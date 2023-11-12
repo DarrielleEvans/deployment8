@@ -1,27 +1,18 @@
-<p align="center">
-<img src="https://github.com/kura-labs-org/kuralabs_deployment_1/blob/main/Kuralogo.png">
-</p>
-<h1 align="center">C4_deployment-8<h1> 
+# Deployment 8 Documentation 
 
-Demonstrate your ability to work within a group to deploy an e-commerce application to ECS.
+## Purpose:
+The primary goal of Deployment 7 is to familiarize ourselves with containerizing our ecom application on ECS. We also gained hands-on experience working with Docker as well as Terraform. This ecom application integrates microservices for the front end as well as the back end. In addition, we also implemented an application load balancer to balance traffic to the frontend containers. This deployment allows us to learn how to work as a team as well as look for ways to mitigate configuration and create microservices.
 
-- Create a separate GitHub repository for this application 
 
-- Download the files from this repository and upload them to your newly created repository 
+## Steps:
+First, we begin this prog
 
-- Be sure to follow the deployment instructions from this repository  
 
-- Document your progress in a .md file in your repository. Also, document any issues you may run into and what you did to fix them.
 
-- Make sure your documentation includes these sections:
-  - Members of your group and group name
-  - Purpose
-  - Issues
-  - Steps
-  - System Diagram 
-  - Optimization (How would you make this deployment more efficient, if you utilize ChatGPT make sure to explain what your prompt was.)
+## System Design Diagram
 
-- Lastly, save your documentation and diagram into your repository. Submit your repository link to the LMS
+## Issues and Troubleshooting
 
-## Deployment instructions Link:
--  https://github.com/kura-labs-org/c4_deployment-8/blob/main/Deployment-instructions.md
+
+## Optimization
+
