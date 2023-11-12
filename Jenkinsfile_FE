@@ -6,21 +6,21 @@ pipeline {
     stages{
     stage('Build'){
         steps {
-            dir('backend'){
+            dir('frontend'){
             sh 'docker build -t aubreyz/frontend1 .'
             }
         }
     }
     stage('Login') {
         steps {
-            dir('backend'){
+            dir('frontend'){
             sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
     }
     stage('Push') {
         steps {
-            dir('backend'){ 
+            dir('frontend'){ 
                 sh 'docker push aubreyz/frontend1'
             }
         }
