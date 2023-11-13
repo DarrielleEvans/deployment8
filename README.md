@@ -1,14 +1,26 @@
 # Deployment 8 Documentation 
+## Meet the Team:
+Darrielle - Project Manager <br>
+Nehemish - System Administrator <br>
+Aubrey - Chief Architect <br>
 
 ## Purpose:
-The primary goal of Deployment 7 is to familiarize ourselves with containerizing our ecom application on ECS. We also gained hands-on experience working with Docker as well as Terraform. This ecom application integrates microservices for the front end as well as the back end. In addition, we also implemented an application load balancer to balance traffic to the frontend containers. This deployment allows us to learn how to work as a team as well as look for ways to mitigate configuration and create microservices.
+The primary goal of Deployment 8 is to familiarize ourselves with containerizing our e-commerce application using Amazon Elastic Container Services (ECS). We also use Docker as well as Terraform. This e-commerce application integrates microservices for the front end as well as the back end. In addition, we also implemented an application load balancer to balance traffic to the frontend containers. This deployment enhances our technical skills in cloud-based environments and strengthens our teamwork skills. Throughout the project, we collectively worked as a team to navigate those complex deployment problems.
 
 
 ## Steps:
-First, we used Terraform to create a Jenkins manager/agent architecture using 3 instances. Each instance has a specific configuration using different user data.
+We began this deployment by creating a branch for each of our role in Git.
+
+#### Create the First AWS Infrastructure with Terraform 
+We creating a new AWS infrastructure using this [Terrafrom](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/main.tf). This tf file is designed to create three different instances for three different purposes. Each instance has a different configuration using different user data. Here is a detailed explanation:
  - Jenkins Instance: click [here](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployjenkins.sh) to checkout the user data script.
  - Terraform Instance: click [here](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployterraform.sh) to checkout the user data script.
  - Docker Instance: click [here](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deploydocker.sh) to checkout the user data script.
+
+
+#### Create Docker images for frontend and backend layer
+For this deployment, we create an image for a frontend and the backend layer. This in turn create microservice between the backend layer as well as the frontend layer. Here is a frontend dockerfile look like:
+
 
 In previous exercises, we deployed the application in a single container. In this deployment, we separated our front end and back end in separate containers. In step 2, we created docker images by specifying the instructions needed to build the Docker image.
 - click [here](https://github.com/DarrielleEvans/deployment8/blob/main/frontend/Dockerfile) to see the front end Docker file
