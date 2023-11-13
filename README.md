@@ -9,10 +9,15 @@ First, we used Terraform to create a Jenkins manager/agent architecture using 3 
  - Jenkins Instance: click [here](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployjenkins.sh) to checkout the user data script.
  - Terraform Instance: click [here](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployterraform.sh) to checkout the user data script.
  - Docker Instance: click [here](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deploydocker.sh) to checkout the user data script.
+In previous exercises, we deployed the application in a single container. In this deployment, we separated our front end and back end in separate containers. In step 2, we created docker images by specifying the instructions needed to build the Docker image.
+
+
+
 
 
 
 ## System Design Diagram
+
 
 ## Issues and Troubleshooting
 
