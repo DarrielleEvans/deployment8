@@ -20,6 +20,7 @@ In previous exercises, we deployed the application in a single container. In thi
 
 
 ## System Design Diagram
+![d8 drawio](https://github.com/DarrielleEvans/deployment8/assets/89504317/8b964f44-6ce7-4a43-aa2f-b43299f11ead)
 
 
 ## Issues and Troubleshooting
