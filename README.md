@@ -14,6 +14,17 @@ In previous exercises, we deployed the application in a single container. In thi
 - click [here](https://github.com/DarrielleEvans/deployment8/blob/main/frontend/Dockerfile) to see the front end Docker file
 - click [here](https://github.com/DarrielleEvans/deployment8/blob/main/backend/Dockerfile) to see the back end Docker file
 
+Next, we created an ecs and vpc Terraform [file](https://github.com/DarrielleEvans/deployment8/blob/main/terraform/main.tf) to create the following resources in our infrastructure:
+ - 2 Availability Zones
+ - 2 Public Subnets
+ - 2 Containers for the front end
+ - 1 Container for the backend
+ - 1 Route Table
+ - Security Group Ports: 8000, 3000, 80
+ - 1 Application Load Balancer
+
+In our fourth step, we created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE) to deploy the ECS Terraform files for the backend.
+We also created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE) to deploy the ECS Terraform files for the front end.
 
 
 
