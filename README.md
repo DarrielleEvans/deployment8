@@ -23,7 +23,7 @@ Next, we created an ecs and vpc Terraform [file](https://github.com/DarrielleEva
  - Security Group Ports: 8000, 3000, 80
  - 1 Application Load Balancer
 
-In our fourth step, we created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE) to deploy the ECS Terraform files for the backend.
+In our fourth step, we created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE) to deploy the ECS Terraform files for the backend. After the initial deployment, we made sure to copy the private ip address and place it in the package.json file so that the front end can connect with the backend.
 We also created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE) to deploy the ECS Terraform files for the front end.
 
 
