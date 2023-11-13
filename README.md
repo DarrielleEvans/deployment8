@@ -6,9 +6,9 @@ The primary goal of Deployment 7 is to familiarize ourselves with containerizing
 
 ## Steps:
 First, we used Terraform to create a Jenkins manager/agent architecture using 3 instances. Each instance has a specific configuration using different user data.
- - Jenkins Instance: click [here]([https://pages.github.com/](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployjenkins.sh)) to checkout the user data script.
- - Terraform Instance: click [here]([https://pages.github.com/](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployterraform.sh)) to checkout the user data script.
- - Docker Instance: click [here]([https://pages.github.com/](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deploydocker.sh)) to checkout the user data script.
+ - Jenkins Instance: click [here]([https://pages.github.com/](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployjenkins.sh) to checkout the user data script.
+ - Terraform Instance: click [here]([https://pages.github.com/](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deployterraform.sh) to checkout the user data script.
+ - Docker Instance: click [here]([https://pages.github.com/](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deploydocker.sh) to checkout the user data script.
 
 
 
