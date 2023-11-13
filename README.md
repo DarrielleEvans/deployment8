@@ -19,7 +19,7 @@ We creating a new AWS infrastructure using this [Terrafrom](https://github.com/D
 
 
 #### Building Docker Images for Frontend and Backend Layers
-For this deployment, we create Docker images for both the frontend and backend layers. This approach will create a microservices architecture, essentailly linking the backend layer to the frontend later. Those images will alter be deployed on Amazon ECS.
+For this deployment, we create Docker images for both the frontend and backend layers. This approach will create a microservices architecture, essentially linking the backend layer to the frontend later. Those images will alter be deployed on Amazon ECS.
 - Frontend Dockerfile:
 ```
 FROM node:10
@@ -41,56 +41,65 @@ RUN python manage.py migrate
 EXPOSE 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 ```
-Similarly, the backend Dockerfile will set up the backend environment, pulling from our repository within the backend folder. It would also install its Python requirement and set up the server to be ready on port 8000.
+Similarly, the backend Dockerfile will set up the backend environment, pulling from our repository within the backend folder. It would also install its Python requirements and set up the server to be ready on port 8000.
 <br>
 <br>
 Please note that both Docker images were built and tested to ensure they were functioning properly before deploying to Amazon ECS. 
 
 #### Creating Jenkinsfile
-We utilize two different Jenkinsfile and 
+We utilize two distinct Jenkins files in this deployment: one for the backend and another for the frontend. We would begin by running the backend Jenkinsfile, and once that was successful, we would retrieve the private IP of the backend service. This IP would then be inserted into `proxy` in the frontend's `package.json`, allowing the front end to connect to the backend. Before we ran the Jenkinsfile, we had to make sure we had our necessary credentials in Jenkins credentials
 
+[Backend Jenkinsfile Pipeline](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE)
+1) Docker Build and Push Backend image
+2) [Backend Terraform file](https://github.com/DarrielleEvans/deployment8/blob/main/terraform/main.tf): After the Docker image is successfully pushed, the pipeline will move to the Terraform agent. Here is what Terraform for the backend is creating:
+   - 1 VPC
+   - 2 Available zones
+   - 2 Public Subnet
+   - 1 Route Table
+   - 1 Internet Gateway
+   - 1 Security Group: allowing traffic on ports 80, 3000, 8000
+   - ECS Cluster: for this application
+   - Backend log with Cloudwatch
+   - ECS Task Definition for Backend
+   - ECS Service for Backend
+   - ALB Target Group for Backend
+   - Application Load Balancer for the E-commerce application
+   - Backend Listener.
+After the completion of the backend pipeline, we would check the infrastructure to ensure all components are functioning.
 
+[Frontend Jenkinsfile Pipeline](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_FE)
+1) Docker Build and Push Frontend Image
+2) [Frontend Terraform file](https://github.com/DarrielleEvans/deployment8/blob/main/terraform/frontend/main.tf): after the frontend Docker image is successfully pushed, the pipeline will move to the Terraform agent to create the frontend infrastructure. Here is what it's creating:
+   - Grab information from the existing infrastructure, like subnets, VPCs, clusters, and ALB.
+   - Frontend log with Cloudwatch
+   - ECS Task for Frontend
+   - ECS Service for Frontend within the Cluster
+   - ALB Target Group for Frontend within the VPC
+   - Frontend Listenser within the ALB.
 
-
-
-
-
-
-
-Next, we created an ecs and vpc Terraform [file](https://github.com/DarrielleEvans/deployment8/blob/main/terraform/main.tf) to create the following resources in our infrastructure:
- - 2 Availability Zones
- - 2 Public Subnets
- - 2 Containers for the front end
- - 1 Container for the backend
- - 1 Route Table
- - Security Group Ports: 8000, 3000, 80
- - 1 Application Load Balancer
-
-In our fourth step, we created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE) to deploy the ECS Terraform files for the backend. After the initial deployment, we made sure to copy the private ip address and place it in the package.json file so that the front end can connect with the backend.
-We also created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/blob/main/Jenkinsfile_BE) to deploy the ECS Terraform files for the front end.
-
-
-
-
-
-
+After running and completing this frontend pipeline, we can check the infrastructure as well as the application using the ALB DNS. 
+![image_720](https://github.com/DarrielleEvans/deployment8/assets/138344000/ed44cc1c-83f7-43c7-b113-c0d463105eec)
 
 ## System Design Diagram
-![d8 drawio](https://github.com/DarrielleEvans/deployment8/assets/89504317/8b964f44-6ce7-4a43-aa2f-b43299f11ead)
-
+![image](https://github.com/DarrielleEvans/deployment8/assets/138344000/cd39ab6f-7d20-4b9e-9ca1-1e57d73ce3c5)
+To view the full system design diagram, click [here](https://github.com/DarrielleEvans/deployment8/blob/main/d8.drawio.png).
 
 ## Issues and Troubleshooting
-
+- Invalid Host Error: We encountered an invalid host error, which we fixed by modifying the `package.json` file within the frontend folder. We added a configuration that would disable the host check
+![image](https://github.com/DarrielleEvans/deployment8/assets/138344000/326cec76-0aab-4a56-8df3-44e7c6fa0e83)
+- Docker Hub Image Conflict: Another issue we faced involved ECS pulling the wrong image from Dockerhub. To fix this, we deleted the repository in Docker Hub and rerun Jenkins to repush the image.
 
 ## Optimization
+- Enhanced Security: Currently, we place all containers in a public subnet, posing a security risk. To fix this, we plan to move that container into a private subnet.
+- Backend Container: For this deployment, we have only one backend container. To optimize, we would like to add a backend container.
+- Application Scaling: We would also like to implement a way to scale the application by adding Auto Scaling Group, etc. 
 
-## Notes
-The ecommerce application's stack uses the following:
-  - Front end: React
-  - Back end: Python using Django Framework
-  - Database: SQlite3
-  - CI/CD: Jenkins
-  - AWS Cloud technologies
-  - AWS Elastic Container Services
 
+## Commonly Asked Question
+What is the application stack of this application?
+- Frontend: React/ Nodejs
+- Backend: SQLite, Python, Django 
+
+Is the backend an API server?
+- Currently, the backend wold act as a API server.
 
