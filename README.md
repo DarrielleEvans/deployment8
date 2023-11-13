@@ -41,3 +41,13 @@ We also created a [Jenkins file](https://github.com/DarrielleEvans/deployment8/b
 
 ## Optimization
 
+## Notes
+The ecommerce application's stack uses the following:
+  - Front end: React
+  - Back end: Python using Django Framework
+  - Database: SQlite3
+  - CI/CD: Jenkins
+  - AWS Cloud technologies
+  - AWS Elastic Container Services
+
+
