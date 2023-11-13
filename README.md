@@ -5,7 +5,8 @@ The primary goal of Deployment 7 is to familiarize ourselves with containerizing
 
 
 ## Steps:
-First, we begin this prog
+First, we used Terraform to create a Jenkins manager/agent architecture using 3 instances. Each instance has a specific configuration using different user data.
+ * 
 
 
 
