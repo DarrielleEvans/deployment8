@@ -9,7 +9,7 @@ The primary goal of Deployment 8 is to familiarize ourselves with containerizing
 
 
 ## Steps:
-We began this deployment by creating a branch for each of our role in Git.
+We began this deployment by creating a branch for each of our roles in Git.
 
 #### Create the First AWS Infrastructure with Terraform 
 We creating a new AWS infrastructure using this [Terrafrom](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/main.tf). This tf file is designed to create three different instances for three different purposes. Each instance has a different configuration using different user data. Here is a detailed explanation:
@@ -18,13 +18,44 @@ We creating a new AWS infrastructure using this [Terrafrom](https://github.com/D
  - Docker Instance: click [here](https://github.com/DarrielleEvans/deployment8/blob/main/first-infrastucture/deploydocker.sh) to checkout the user data script.
 
 
-#### Create Docker images for frontend and backend layer
-For this deployment, we create an image for a frontend and the backend layer. This in turn create microservice between the backend layer as well as the frontend layer. Here is a frontend dockerfile look like:
+#### Building Docker Images for Frontend and Backend Layers
+For this deployment, we create Docker images for both the frontend and backend layers. This approach will create a microservices architecture, essentailly linking the backend layer to the frontend later. Those images will alter be deployed on Amazon ECS.
+- Frontend Dockerfile:
+```
+FROM node:10
+RUN git clone https://github.com/DarrielleEvans/deployment8.git
+WORKDIR /deployment8/frontend
+RUN npm install
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+This Dockerfile will set up the frontend environment, grabbing the latest code from our repository within the frontend folder. It would then install its dependencies and prepare the service to be run on port 3000.
+
+- Backend Dockerfile:
+```
+FROM python:3.7
+RUN git clone https://github.com/DarrielleEvans/deployment8.git
+WORKDIR /deployment8/backend/
+RUN pip install -r requirements.txt
+RUN python manage.py migrate
+EXPOSE 8000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+```
+Similarly, the backend Dockerfile will set up the backend environment, pulling from our repository within the backend folder. It would also install its Python requirement and set up the server to be ready on port 8000.
+<br>
+<br>
+Please note that both Docker images were built and tested to ensure they were functioning properly before deploying to Amazon ECS. 
+
+#### Creating Jenkinsfile
+We utilize two different Jenkinsfile and 
 
 
-In previous exercises, we deployed the application in a single container. In this deployment, we separated our front end and back end in separate containers. In step 2, we created docker images by specifying the instructions needed to build the Docker image.
-- click [here](https://github.com/DarrielleEvans/deployment8/blob/main/frontend/Dockerfile) to see the front end Docker file
-- click [here](https://github.com/DarrielleEvans/deployment8/blob/main/backend/Dockerfile) to see the back end Docker file
+
+
+
+
+
+
 
 Next, we created an ecs and vpc Terraform [file](https://github.com/DarrielleEvans/deployment8/blob/main/terraform/main.tf) to create the following resources in our infrastructure:
  - 2 Availability Zones
