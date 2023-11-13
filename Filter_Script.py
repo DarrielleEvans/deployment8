@@ -2,10 +2,18 @@ import os
 from github import Github
 from configparser import ConfigParser
 
-def push_to_github_gitignore(local_repo_path, github_token, repo_name, commit_message='Add .gitignore'):
+
+def push_to_github_gitignore(github_token, repo_name, commit_message='Add .gitignore'):
     try:
-        # Change working directory to the repository path
-        os.chdir(local_repo_path)
+        # Connect to GitHub using the provided token
+        github = Github(github_token)
+
+        # Get the user and repository
+        user = github.get_user()
+        repository = user.get_repo(repo_name)
+
+        # Fetch all files in the repository
+        contents = repository.get_contents("")
 
         # Print the current working directory
         print(f"Current working directory: {os.getcwd()}")
@@ -30,24 +38,16 @@ def push_to_github_gitignore(local_repo_path, github_token, repo_name, commit_me
     """
 
         # Write the content to the .gitignore file
-        gitignore_path = os.path.join(local_repo_path, '.gitignore')
+        gitignore_path = os.path.join(os.getcwd(), '.gitignore')
         with open(gitignore_path, 'w') as gitignore_file:
             gitignore_file.write(gitignore_content)
 
         # Print the directories of ignored files
-        print("Directories of ignored files:")
-        for root, dirs, files in os.walk(local_repo_path):
-            for name in files:
-                file_path = os.path.join(root, name)
-                if any(file_path.endswith(ignore_pattern) for ignore_pattern in ignored_files):
-                    print(file_path)
-
-        # Connect to GitHub using the provided token
-        github = Github(github_token)
-
-        # Get the user and repository
-        user = github.get_user()
-        repository = user.get_repo(repo_name)
+        with open(gitignore_path, 'r') as gitignore_file:
+            ignored_files = [line.strip() for line in gitignore_file.readlines() if not line.startswith("#") and line.strip()]
+            for ignored_file in ignored_files:
+                ignored_file_path = os.path.join(os.getcwd(), ignored_file)
+                print(f"Ignored file directory: {ignored_file_path}")
 
         # Add and commit .gitignore file
         repository.create_file(".gitignore", commit_message, gitignore_content)
@@ -58,9 +58,10 @@ def push_to_github_gitignore(local_repo_path, github_token, repo_name, commit_me
 
 if __name__ == "__main__":
     # Sensitive Information:
+    # Replace the following placeholders with your actual sensitive information.
     github_token = 'your_github_token'
-    local_repo_path = '/path/to/your/local/repository'
-    repo_name = 'deployment8'
+    repo_name = 'your_repository_name'
 
-    push_to_github_gitignore(local_repo_path, github_token, repo_name)
+    push_to_github_gitignore(github_token, repo_name)
+
 
