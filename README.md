@@ -101,5 +101,5 @@ What is the application stack of this application?
 - Backend: SQLite, Python, Django 
 
 Is the backend an API server?
-- Currently, the backend wold act as a API server.
+- Currently, the backend would act as an API server.
 
